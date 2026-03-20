@@ -1,46 +1,39 @@
 import { NextResponse } from "next/server";
-import { createWalletClient, createPublicClient, http } from "viem";
+import { createWalletClient, http, keccak256, encodePacked, toBytes } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
-import { hashkeyTestnet, CONTRACTS, ZKID_ABI } from "@/app/lib/config";
+import { hashkeyTestnet } from "@/app/lib/config";
 
 export async function POST(req: Request) {
   const { userAddress } = await req.json();
   if (!userAddress) return NextResponse.json({ error: "No address" }, { status: 400 });
 
-  const account = privateKeyToAccount(`0x${process.env.DEPLOYER_PRIVATE_KEY}`);
-
-  const walletClient = createWalletClient({
-    account,
-    chain: hashkeyTestnet,
-    transport: http("https://testnet.hsk.xyz"),
-  });
-
-  const publicClient = createPublicClient({
-    chain: hashkeyTestnet,
-    transport: http("https://testnet.hsk.xyz"),
-  });
-
   try {
-    // Check already has ZKID
-    const hasZKID = await publicClient.readContract({
-      address: CONTRACTS.ZKID,
-      abi: ZKID_ABI,
-      functionName: "hasZKID",
-      args: [userAddress],
+    const account = privateKeyToAccount(`0x${process.env.DEPLOYER_PRIVATE_KEY}`);
+
+    // Generate nonce
+    const nonce = keccak256(encodePacked(
+      ["address", "uint256"],
+      [userAddress as `0x${string}`, BigInt(Date.now())]
+    ));
+
+    // Sign: keccak256(userAddress + nonce + tier)
+    const tier = 2;
+    const message = keccak256(encodePacked(
+      ["address", "bytes32", "uint8"],
+      [userAddress as `0x${string}`, nonce as `0x${string}`, tier]
+    ));
+
+    const walletClient = createWalletClient({
+      account,
+      chain: hashkeyTestnet,
+      transport: http("https://testnet.hsk.xyz"),
     });
 
-    if (hasZKID) return NextResponse.json({ error: "Already has ZKID" }, { status: 400 });
-
-    // Mint via deployer (verifier)
-    const hash = await walletClient.writeContract({
-      address: CONTRACTS.ZKID,
-      abi: ZKID_ABI,
-      functionName: "mint",
-      args: [userAddress, 2], // tier 2 = verified
+    const signature = await walletClient.signMessage({
+      message: { raw: toBytes(message) },
     });
 
-    await publicClient.waitForTransactionReceipt({ hash });
-    return NextResponse.json({ success: true, txHash: hash });
+    return NextResponse.json({ nonce, tier, signature, success: true });
   } catch (e: any) {
     return NextResponse.json({ error: e.message?.slice(0, 100) }, { status: 500 });
   }
