@@ -9,7 +9,7 @@ const CHAINS = [
     rpc: "https://testnet.hsk.xyz",
     name: "HashKey Testnet",
     symbol: "HSK",
-    explorer: "https://hashkey.blockscout.com",
+    explorer: "https://testnet-explorer.hsk.xyz",
     color: "bg-blue-900",
     letter: "H",
   },

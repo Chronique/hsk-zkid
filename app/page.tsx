@@ -283,7 +283,7 @@ export default function Home() {
               )}
 
               {txHash && (
-                <a href={`https://hashkey.blockscout.com/tx/${txHash}`}
+                <a href={`https://testnet-explorer.hsk.xyz/tx/${txHash}`}
                   target="_blank" rel="noopener noreferrer"
                   className="text-xs text-blue-400 hover:underline block text-center">
                   View transaction 
@@ -397,7 +397,7 @@ export default function Home() {
                 require(verified, "Not verified");`}</pre>
               </div>
 
-              <a href={`https://hashkey.blockscout.com/address/${CONTRACTS.GATE}`}
+              <a href={`https://testnet-explorer.hsk.xyz/address/${CONTRACTS.GATE}`}
                 target="_blank" rel="noopener noreferrer"
                 className="block text-center text-xs text-blue-400 hover:underline">
                 View ZKIDGate contract on Explorer 
@@ -415,6 +415,7 @@ export default function Home() {
     </main>
   );
 }
+
 
 
 

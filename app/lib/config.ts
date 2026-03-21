@@ -8,7 +8,7 @@ export const hashkeyTestnet = defineChain({
   blockExplorers: {
     default: {
       name: "HashKey Testnet Explorer",
-      url: "https://hashkeychain-testnet-explorer.alt.technology",
+      url: "https://testnet-explorer.hsk.xyz",
     },
   },
   testnet: true,
@@ -69,3 +69,4 @@ export const REGISTRY_ABI = [
     inputs: [{ name: "", type: "address" }],
     outputs: [{ name: "", type: "address" }] },
 ] as const;
+
