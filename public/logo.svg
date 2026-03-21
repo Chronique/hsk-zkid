@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 460" width="512" height="512">
+<rect width="400" height="460" fill="#0a0a12"/>
+
+<!-- Crown petals -->
+<path d="M200 30 L190 55 L200 50 L210 55Z" fill="#c8a040"/>
+<path d="M174 35 L168 62 L180 56 L184 64Z" fill="#c8a040" opacity="0.8"/>
+<path d="M226 35 L232 62 L220 56 L216 64Z" fill="#c8a040" opacity="0.8"/>
+<path d="M152 44 L150 72 L162 65 L162 74Z" fill="#c8a040" opacity="0.6"/>
+<path d="M248 44 L250 72 L238 65 L238 74Z" fill="#c8a040" opacity="0.6"/>
+<path d="M134 60 L136 88 L147 80 L145 90Z" fill="#c8a040" opacity="0.4"/>
+<path d="M266 60 L264 88 L253 80 L255 90Z" fill="#c8a040" opacity="0.4"/>
+
+<!-- Crown lotus ring -->
+<ellipse cx="200" cy="82" rx="72" ry="18" fill="none" stroke="#c8a040" stroke-width="1.5"/>
+<ellipse cx="200" cy="82" rx="60" ry="13" fill="#0f1020" stroke="#c8a040" stroke-width="1"/>
+<path d="M140 78 Q128 70 132 82 Q140 90 148 84Z" fill="#c8a040" opacity="0.5"/>
+<path d="M260 78 Q272 70 268 82 Q260 90 252 84Z" fill="#c8a040" opacity="0.5"/>
+
+<!-- Main face -->
+<ellipse cx="200" cy="220" rx="100" ry="130" fill="#0f1020" stroke="#c8a040" stroke-width="2"/>
+<ellipse cx="200" cy="220" rx="88" ry="118" fill="none" stroke="#c8a040" stroke-width="0.8" opacity="0.4"/>
+
+<!-- Forehead ornament -->
+<path d="M170 108 Q200 96 230 108 Q220 120 200 116 Q180 120 170 108Z" fill="#c8a040" opacity="0.7"/>
+<circle cx="200" cy="108" r="5" fill="#c8a040"/>
+<circle cx="182" cy="112" r="3" fill="#c8a040" opacity="0.7"/>
+<circle cx="218" cy="112" r="3" fill="#c8a040" opacity="0.7"/>
+
+<!-- Brows -->
+<path d="M148 148 Q172 138 196 144" fill="none" stroke="#c8a040" stroke-width="3" stroke-linecap="round"/>
+<path d="M252 148 Q228 138 204 144" fill="none" stroke="#c8a040" stroke-width="3" stroke-linecap="round"/>
+
+<!-- Eyes -->
+<circle cx="172" cy="178" r="26" fill="#c8a040" opacity="0.15" stroke="#c8a040" stroke-width="2"/>
+<circle cx="228" cy="178" r="26" fill="#c8a040" opacity="0.15" stroke="#c8a040" stroke-width="2"/>
+<circle cx="172" cy="178" r="16" fill="#0a0a12" stroke="#c8a040" stroke-width="1.5"/>
+<circle cx="228" cy="178" r="16" fill="#0a0a12" stroke="#c8a040" stroke-width="1.5"/>
+<circle cx="172" cy="178" r="10" fill="none" stroke="#c8a040" stroke-width="1.5"/>
+<circle cx="228" cy="178" r="10" fill="none" stroke="#c8a040" stroke-width="1.5"/>
+<circle cx="178" cy="172" r="4" fill="#d44" opacity="0.9"/>
+<circle cx="234" cy="172" r="4" fill="#d44" opacity="0.9"/>
+<circle cx="180" cy="172" r="1.5" fill="#c8a040"/>
+<circle cx="236" cy="172" r="1.5" fill="#c8a040"/>
+<path d="M146 158 Q138 170 146 182 Q150 186 154 182" fill="none" stroke="#c8a040" stroke-width="1.5" opacity="0.7"/>
+<path d="M254 158 Q262 170 254 182 Q250 186 246 182" fill="none" stroke="#c8a040" stroke-width="1.5" opacity="0.7"/>
+
+<!-- Nose -->
+<path d="M176 228 Q188 222 200 226 Q212 222 224 228 Q216 240 200 238 Q184 240 176 228Z" fill="#c8a040" opacity="0.6"/>
+
+<!-- Mouth -->
+<path d="M164 256 Q200 248 236 256 Q228 278 200 282 Q172 278 164 256Z" fill="#0a0a12" stroke="#c8a040" stroke-width="2"/>
+<rect x="185" y="258" width="8" height="12" rx="2" fill="#c8a040"/>
+<rect x="197" y="258" width="6" height="14" rx="2" fill="#c8a040"/>
+<rect x="207" y="258" width="8" height="12" rx="2" fill="#c8a040"/>
+<circle cx="172" cy="264" r="3" fill="#c8a040" opacity="0.6"/>
+<circle cx="228" cy="264" r="3" fill="#c8a040" opacity="0.6"/>
+
+<!-- Cheek spirals -->
+<path d="M138 210 Q128 220 134 232 Q140 238 148 234 Q152 228 148 222 Q144 218 140 222" fill="none" stroke="#c8a040" stroke-width="2" stroke-linecap="round"/>
+<path d="M262 210 Q272 220 266 232 Q260 238 252 234 Q248 228 252 222 Q256 218 260 222" fill="none" stroke="#c8a040" stroke-width="2" stroke-linecap="round"/>
+
+<!-- Chin shield with ZK lock -->
+<path d="M160 320 Q200 308 240 320 Q232 344 200 350 Q168 344 160 320Z" fill="none" stroke="#c8a040" stroke-width="1.5"/>
+<rect x="192" y="326" width="16" height="12" rx="3" fill="#d44" opacity="0.85"/>
+<path d="M194 326 Q194 318 200 318 Q206 318 206 326" fill="none" stroke="#d44" stroke-width="2" stroke-linecap="round"/>
+
+<!-- Side ornaments -->
+<path d="M100 220 Q82 210 78 224 Q82 238 100 236Z" fill="#c8a040" opacity="0.5"/>
+<path d="M300 220 Q318 210 322 224 Q318 238 300 236Z" fill="#c8a040" opacity="0.5"/>
+<path d="M100 248 Q78 244 76 258 Q82 268 100 262Z" fill="#c8a040" opacity="0.4"/>
+<path d="M300 248 Q322 244 324 258 Q318 268 300 262Z" fill="#c8a040" opacity="0.4"/>
+
+<!-- Bottom fan -->
+<path d="M168 350 Q200 340 232 350 Q224 370 212 380 L200 388 L188 380 Q176 370 168 350Z" fill="none" stroke="#c8a040" stroke-width="1.5"/>
+<circle cx="200" cy="392" r="4" fill="#c8a040"/>
+<circle cx="188" cy="404" r="3" fill="#c8a040" opacity="0.6"/>
+<circle cx="212" cy="404" r="3" fill="#c8a040" opacity="0.6"/>
+
+<!-- Outer glow -->
+<ellipse cx="200" cy="220" rx="100" ry="130" fill="none" stroke="#d44" stroke-width="0.8" opacity="0.3"/>
+</svg>

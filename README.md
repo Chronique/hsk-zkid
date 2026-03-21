@@ -1,12 +1,17 @@
 # 🛡️ HashKey ZKID
 
-> Privacy-preserving on-chain identity for HashKeyChain — verified by HashKey, known by none.
+> Privacy-preserving identity infrastructure for HashKeyChain — verified by HashKey, known by none.
 
 [![HashKeyChain](https://img.shields.io/badge/HashKeyChain-Testnet%20%23133-00b4d8?style=flat-square)](https://testnet.hsk.xyz)
 [![Next.js](https://img.shields.io/badge/Next.js-15-black?style=flat-square&logo=next.js)](https://nextjs.org)
 [![Solidity](https://img.shields.io/badge/Solidity-0.8.28-363636?style=flat-square&logo=solidity)](https://soliditylang.org)
 [![ERC-5192](https://img.shields.io/badge/ERC--5192-Soulbound-purple?style=flat-square)](https://eips.ethereum.org/EIPS/eip-5192)
+[![Privy](https://img.shields.io/badge/Wallet-Privy-blueviolet?style=flat-square)](https://privy.io)
 [![License](https://img.shields.io/badge/license-MIT-green?style=flat-square)](LICENSE)
+
+**Live Demo:** https://hsk-zkid-app.vercel.app  
+**Contracts:** https://github.com/Chronique/hsk-zkid  
+**Frontend:** https://github.com/Chronique/hsk-zkid-app
 
 ---
 
@@ -18,62 +23,82 @@ DeFi protocols on HashKeyChain face a fundamental conflict:
 - **Users** demand privacy — nobody wants their identity exposed on-chain
 - **Current solutions** (Binance BABT, Coinbase Verification) link wallet directly to identity — **zero privacy**
 
-HashKey Exchange already uses **Sumsub** to KYC 600K+ users. But that verification stays off-chain. There's no privacy-preserving way to bring it on-chain.
+HashKey Exchange already uses **Sumsub** to KYC 600K+ users. But that verification stays off-chain. There's no privacy-preserving way to bring it on-chain — until now.
 
 ---
 
 ## The Solution
 
-**HashKey ZKID** is a Soulbound NFT (ERC-5192) that acts as a privacy-preserving proof of KYC verification.
+**HashKey ZKID** is a complete identity infrastructure for HashKeyChain, consisting of:
+
+1. **ZKID Soulbound NFT** — ERC-5192 token that proves KYC verification without revealing identity
+2. **Wallet Registry** — Link up to 5 wallets to one verified identity (anti money-laundering)
+3. **Smart Wallet** — Privy-powered embedded wallet with social login
+4. **Multi-chain Portfolio** — View balances across all EVM chains
 
 ```
-HashKey Exchange KYC (via Sumsub)
-         ↓
-HashKey backend signs credential
-         ↓  (ZK Proof — identity stays hidden)
+HashKey Exchange (KYC via Sumsub, 600K+ users)
+         ↓ social login via Privy
+HashKey Smart Wallet (embedded, gasless UX)
+         ↓ backend signs ZK credential
 User claims ZKID Soulbound NFT
-         ↓
+         ↓ bind up to 5 additional wallets
 DeFi Protocol: "verified?" → YES ✅
 DeFi Protocol: "who are you?" → UNKNOWN 🔒
 ```
 
-**What ZKID proves:**
-- ✅ KYC verified by HashKey Exchange
-- ✅ Age ≥ 18
-- ✅ Not from sanctioned country
+---
 
-**What ZKID never reveals:**
-- 🔒 Real name
-- 🔒 Passport / ID number
-- 🔒 Date of birth
-- 🔒 Nationality
-- 🔒 Email / phone
+## Key Features
+
+### 🛡️ ZKID Identity
+- Soulbound NFT (ERC-5192) — permanently non-transferable
+- 1 ZKID per address — prevents identity farming
+- 3 tiers: Basic, Verified, Premium
+- ZK-inspired credential system via ECDSA signature
+
+### 🔗 Wallet Registry
+- Link up to 5 EVM wallets to one verified identity
+- All linked wallets recognized as verified by DeFi protocols
+- Anti-money laundering: all activity traceable to one KYC identity
+- Privacy preserved: connections not visible on-chain
+
+### 💼 Multi-Chain Portfolio
+- View native token balances across HashKeyChain, Base, Optimism, Arbitrum, Polygon, BNB Chain
+- Aggregates all linked wallets in one dashboard
+- ERC-20 token support via Blockscout API
+
+### 🏛️ DeFi Gate Demo
+- Live demonstration of ZKID-gated smart contract
+- Code snippet for DeFi protocol integration
+- One-line verification: `zkid.hasZKID(msg.sender)`
 
 ---
 
 ## How It Works
 
-### 1. Request Verification
-User connects wallet and requests identity verification from HashKey backend.
+### 1. Login with Social Account
+User connects via email, Google, or existing wallet using Privy — embedded wallet auto-created, no seed phrase needed.
 
-### 2. Backend Signs Credential
-HashKey backend (trusted issuer) generates a signed credential:
+### 2. Get ZKID
+HashKey backend generates a signed credential (simulating ZK proof):
 ```
 sign(keccak256(userAddress + nonce + tier))
 ```
-This simulates the ZK proof generation — in production, this would be a full Groth16 ZK proof.
+User submits credential from their own wallet — `claimWithSignature()`.
 
-### 3. User Claims ZKID
-User submits the credential to the smart contract **from their own wallet**:
-```solidity
-zkid.claimWithSignature(nonce, tier, signature)
-```
-The contract verifies the signature and mints a Soulbound NFT.
+### 3. Register & Bind Wallets
+Primary wallet registers on `WalletRegistry`. Up to 5 additional wallets can be bound to the same identity.
 
-### 4. DeFi Protocols Gate Access
+### 4. Access DeFi
 Any protocol on HashKeyChain can verify users without knowing their identity:
 ```solidity
+// Option 1: Check ZKID directly
 require(zkid.hasZKID(msg.sender), "ZKID required");
+
+// Option 2: Check any linked wallet (1 of 5)
+(bool verified,) = registry.isVerifiedWallet(msg.sender);
+require(verified, "Not verified");
 ```
 
 ---
@@ -82,41 +107,73 @@ require(zkid.hasZKID(msg.sender), "ZKID required");
 
 Deployed on **HashKeyChain Testnet (Chain ID: 133)**
 
-| Contract | Address | Description |
-|---|---|---|
-| `HashKeyZKID` | `0xb5141ec572f696947867e2eeefe2e67a2d8b0ae9` | ERC-5192 Soulbound NFT |
-| `ZKIDVerifier` | `0xf989a2b7989fed273709ec52a2e0ea8863399eb2` | Signature verifier |
-| `ZKIDGate` | `0xa8b37ef69f30d46dedb0c1feff64040a9f8be1da` | Demo DeFi access control |
+| Contract | Address |
+|---|---|
+| `HashKeyZKID` | `0x25a83214f54283929fee3f2e6ef3ba8290ea7201` |
+| `ZKIDVerifier` | `0x75e434634532f2f6a8c24d2a8d6f789c1e2bf6fd` |
+| `ZKIDGate` | `0x21d0dee0275e230262c3adb4da9e8ee707e3b52e` |
+| `WalletRegistry` | `0xcb34f3eba54a58c51566b5f2a56d9af06a17a273` |
 
-### HashKeyZKID.sol
-- ERC-5192 compliant — permanently locked (non-transferable)
-- 1 ZKID per address — prevents identity farming
-- 3 tiers: Basic (1), Verified (2), Premium (3)
-- `claimWithSignature()` — user claims with HashKey backend signature
-- `hasZKID(address)` — simple boolean check for DeFi protocols
+### Contract Details
 
-### ZKIDVerifier.sol
-- ECDSA signature verification
-- Nullifier system — prevents double-claim
-- Trusted issuer: HashKey backend signer
+**HashKeyZKID.sol**
+- ERC-5192 compliant — permanently locked
+- `claimWithSignature(nonce, tier, signature)` — user claims with backend signature
+- `hasZKID(address)` — simple check for DeFi protocols
+- Nullifier system prevents double-claim
 
-### ZKIDGate.sol
+**WalletRegistry.sol**
+- `register()` — register primary wallet (requires ZKID)
+- `bindWallet(address)` — link secondary wallet (max 5)
+- `isVerifiedWallet(address)` — check if any wallet is verified
+- `getLinkedWallets(address)` — list all linked wallets
+
+**ZKIDGate.sol**
 - Demo DeFi protocol with ZKID access control
-- `deposit()` — only verified users
-- `claimYield()` — only premium tier users
+- `deposit()` — verified users only
+- `claimYield()` — premium tier only
 
 ---
 
-## Comparison
+## Architecture
 
-| Feature | Binance BABT | Coinbase Verify | **HashKey ZKID** |
-|---|---|---|---|
-| Soulbound | ✅ | ✅ | ✅ |
-| ZK Privacy | ❌ | ❌ | ✅ |
-| Wallet unlinkable | ❌ | ❌ | ✅ |
-| HashKeyChain native | ❌ | ❌ | ✅ |
-| DeFi composable | Partial | Partial | ✅ |
-| Open source | ❌ | ❌ | ✅ |
+```
+┌─────────────────────────────────┐
+│   HashKey Exchange (Sumsub KYC) │
+│   600K+ verified users          │
+└────────────┬────────────────────┘
+             │ sign credential
+             ▼
+┌─────────────────────────────────┐
+│   Backend API (/api/mint)       │
+│   ECDSA signature generation    │
+│   Simulates ZK proof            │
+└────────────┬────────────────────┘
+             │ nonce + tier + signature
+             ▼
+┌─────────────────────────────────┐
+│   User Wallet (Privy Embedded)  │
+│   claimWithSignature()          │
+└────────────┬────────────────────┘
+             │ verified
+             ▼
+┌─────────────────────────────────┐
+│   HashKeyZKID Contract          │
+│   Soulbound NFT minted          │
+└────────────┬────────────────────┘
+             │ register + bind wallets
+             ▼
+┌─────────────────────────────────┐
+│   WalletRegistry Contract       │
+│   1 identity = up to 6 wallets  │
+└────────────┬────────────────────┘
+             │ gate access
+             ▼
+┌─────────────────────────────────┐
+│   DeFi Protocols                │
+│   Privacy-preserving KYC gate   │
+└─────────────────────────────────┘
+```
 
 ---
 
@@ -127,9 +184,25 @@ Deployed on **HashKeyChain Testnet (Chain ID: 133)**
 | Smart Contracts | Solidity 0.8.28, Hardhat 3 |
 | Chain | HashKeyChain Testnet (Chain 133) |
 | Frontend | Next.js 15, Tailwind CSS |
-| Wallet | wagmi v2, viem |
+| Wallet | Privy (embedded wallet + social login) |
+| Web3 | viem v2 |
 | Deploy | Vercel |
-| KYC Backend | HashKey Exchange + Sumsub |
+| Explorer | testnet-explorer.hsk.xyz |
+
+---
+
+## Comparison
+
+| Feature | Binance BABT | Coinbase Verify | **HashKey ZKID** |
+|---|---|---|---|
+| Soulbound NFT | ✅ | ✅ | ✅ |
+| ZK Privacy | ❌ | ❌ | ✅ |
+| Wallet unlinkable | ❌ | ❌ | ✅ |
+| Multi-wallet identity | ❌ | ❌ | ✅ (5 wallets) |
+| Social login | ❌ | ❌ | ✅ (Privy) |
+| Multi-chain portfolio | ❌ | ❌ | ✅ (6 chains) |
+| HashKeyChain native | ❌ | ❌ | ✅ |
+| Open source | ❌ | ❌ | ✅ |
 
 ---
 
@@ -137,20 +210,19 @@ Deployed on **HashKeyChain Testnet (Chain ID: 133)**
 
 ### Prerequisites
 - Node.js 18+
-- MetaMask with HashKeyChain Testnet added
-- HSK testnet tokens from [faucet](https://faucet.hsk.xyz)
 
-### Frontend
+### Run Frontend
 
 ```bash
-git clone https://github.com/Chronique/hsk-zkid
+git clone https://github.com/Chronique/hsk-zkid-app
 cd hsk-zkid-app
 npm install
 ```
 
 Create `.env.local`:
 ```env
-DEPLOYER_PRIVATE_KEY=your_deployer_private_key
+NEXT_PUBLIC_PRIVY_APP_ID=your_privy_app_id
+DEPLOYER_PRIVATE_KEY=your_deployer_private_key_without_0x
 ```
 
 ```bash
@@ -159,16 +231,17 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000)
 
-### Smart Contracts
+### Deploy Contracts
 
 ```bash
+git clone https://github.com/Chronique/hsk-zkid
 cd hsk-zkid
 npm install
 ```
 
 Create `.env`:
 ```env
-PRIVATE_KEY=your_deployer_private_key
+PRIVATE_KEY=your_private_key_without_0x
 ```
 
 ```bash
@@ -176,9 +249,7 @@ npx hardhat compile
 npx tsx scripts/deploy.ts
 ```
 
----
-
-## Add HashKeyChain to MetaMask
+### Add HashKeyChain to MetaMask
 
 | Field | Value |
 |---|---|
@@ -186,22 +257,28 @@ npx tsx scripts/deploy.ts
 | RPC URL | https://testnet.hsk.xyz |
 | Chain ID | 133 |
 | Symbol | HSK |
-| Explorer | https://hashkeychain-testnet-explorer.alt.technology |
+| Explorer | https://testnet-explorer.hsk.xyz |
+
+Get testnet HSK: https://faucet.hsk.xyz
 
 ---
 
 ## Roadmap
 
 - [x] ERC-5192 Soulbound NFT contract
-- [x] Signature-based credential verification
-- [x] DeFi access control demo (ZKIDGate)
-- [x] Frontend with wallet connection
+- [x] ECDSA-based credential verification
+- [x] Nullifier system (prevent double-claim)
+- [x] WalletRegistry — bind up to 5 wallets
+- [x] ZKIDGate — DeFi access control demo
+- [x] Privy embedded wallet + social login
+- [x] Multi-chain portfolio (6 EVM chains)
 - [x] Deploy to HashKeyChain testnet
+- [x] Live on Vercel
 - [ ] Real ZK circuit (Semaphore / Groth16)
 - [ ] Integration with official HashKey KYC SBT
-- [ ] Multi-tier credential system
 - [ ] Mainnet deployment
 - [ ] SDK for DeFi protocol integration
+- [ ] Mobile app
 
 ---
 
@@ -211,7 +288,7 @@ npx tsx scripts/deploy.ts
 
 > *"Technology Empowers Finance, Innovation Reconstructs Ecosystem"*
 
-HashKey Group operates one of the world's largest regulated crypto exchanges with 600K+ KYC-verified users. HashKey ZKID bridges that trust to the DeFi ecosystem — privately.
+HashKey Group is one of the world's largest regulated crypto exchanges with 600K+ KYC-verified users. HashKey ZKID bridges that institutional trust to the DeFi ecosystem — privately, compliantly, and natively on HashKeyChain.
 
 ---
 

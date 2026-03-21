@@ -5,6 +5,13 @@ import { Providers } from "./providers";
 export const metadata: Metadata = {
   title: "HashKey ZKID",
   description: "Privacy-preserving identity on HashKeyChain",
+  icons: {
+    icon: [
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+      { url: '/logo-32x32.png', sizes: '32x32' },
+    ],
+    apple: '/logo-180x180.png',
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
